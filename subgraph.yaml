@@ -1,0 +1,35 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Factory
+    network: arbitrum-one
+    source:
+      address: "0x51E8D106C646cA58Caf32A47812e95887C071a62"
+      abi: Factory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - DisableFeeOption
+        - EnableFeeOption
+        - PoolCreated
+        - SetFeeConfiguration
+        - SetFeeToSetter
+      abis:
+        - name: Factory
+          file: ./abis/Factory.json
+      eventHandlers:
+        - event: DisableFeeOption(uint16)
+          handler: handleDisableFeeOption
+        - event: EnableFeeOption(uint16)
+          handler: handleEnableFeeOption
+        - event: PoolCreated(indexed address,indexed address,address,uint32,uint16,uint256)
+          handler: handlePoolCreated
+        - event: SetFeeConfiguration(address,uint16)
+          handler: handleSetFeeConfiguration
+        - event: SetFeeToSetter(address)
+          handler: handleSetFeeToSetter
+      file: ./src/factory.ts
