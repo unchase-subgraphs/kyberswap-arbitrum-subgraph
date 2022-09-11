@@ -1,4 +1,6 @@
-specVersion: 0.0.1
+specVersion: 0.0.4
+description: Kyberswap is the best place to trade and earn on networks such as Ethereum, Polygon, Binance Smart Chain (BSC), Avalanche, and Fantom; you can get the best rates for your token swaps and earn more with your token assets.
+repository: https://github.com/unchase-subgraphs/kyberswap-arbitrum-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,28 +10,46 @@ dataSources:
     source:
       address: "0x51E8D106C646cA58Caf32A47812e95887C071a62"
       abi: Factory
+      startBlock: 7235829
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
-        - DisableFeeOption
-        - EnableFeeOption
-        - PoolCreated
-        - SetFeeConfiguration
-        - SetFeeToSetter
+        - Pair
+        - Token
       abis:
         - name: Factory
           file: ./abis/Factory.json
+        - name: ERC20
+          file: ./abis/ERC20.json
+        - name: ERC20SymbolBytes
+          file: ./abis/ERC20SymbolBytes.json
+        - name: ERC20NameBytes
+          file: ./abis/ERC20NameBytes.json
       eventHandlers:
-        - event: DisableFeeOption(uint16)
-          handler: handleDisableFeeOption
-        - event: EnableFeeOption(uint16)
-          handler: handleEnableFeeOption
         - event: PoolCreated(indexed address,indexed address,address,uint32,uint16,uint256)
-          handler: handlePoolCreated
-        - event: SetFeeConfiguration(address,uint16)
-          handler: handleSetFeeConfiguration
-        - event: SetFeeToSetter(address)
-          handler: handleSetFeeToSetter
+          handler: handlePairCreated
       file: ./src/factory.ts
+templates:
+  - kind: ethereum/contract
+    name: Pair
+    network: arbitrum-one
+    source:
+      abi: Pair
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.6
+      language: wasm/assemblyscript
+      file: ./src/core.ts
+      entities:
+        - Pair
+        - Token
+      abis:
+        - name: Pair
+          file: ./abis/pair.json
+        - name: Factory
+          file: ./abis/factory.json
+      eventHandlers:
+        - event: Sync(uint112,uint112)
+          handler: handleSync
