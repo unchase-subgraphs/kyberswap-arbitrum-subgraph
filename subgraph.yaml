@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: Kyberswap is the best place to trade and earn on networks such as Ethereum, Polygon, Binance Smart Chain (BSC), Avalanche, and Fantom; you can get the best rates for your token swaps and earn more with your token assets.
 repository: https://github.com/unchase-subgraphs/kyberswap-arbitrum-subgraph
 schema:
@@ -13,7 +13,7 @@ dataSources:
       startBlock: 7235829
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Pair
@@ -39,7 +39,7 @@ templates:
       abi: Pair
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/core.ts
       entities:
